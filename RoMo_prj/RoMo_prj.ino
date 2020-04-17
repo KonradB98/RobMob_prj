@@ -17,10 +17,10 @@ void loop() {
  left_sensor_state = analogRead(left_sensor_pin);//Przypisanie wartosci sczytanej z lewego czujnika
  right_sensor_state = analogRead(right_sensor_pin);//Przypisanie wartosci sczytanej z prawego czujnika
  
- //Wypisanie komunikatu i wartosci odczytu do konsoli
-  if ( left_sensor_state > GRANICA) digitalWrite(LED, 1);
-  else digitalWrite(LED, 0); //jeśli czujnik widzi czarną linie to zapala diodę
-  
+  if ( right_sensor_state > GRANICA) digitalWrite(LED, 1);
+ else digitalWrite(LED, 0); //jeśli czujnik widzi czarną linie to zapala diodę
+ 
+  //Wypisanie komunikatu i wartosci odczytu do konsoli
  /* Serial.print("Lewy czujnik: ");
   Serial.println(left_sensor_state);
   delay(1000);
