@@ -27,15 +27,15 @@ Serial.begin(9600);//Otworzenie portu szeregowego do monitorowania danych z czuj
 
 void loop() {
 
-  digitalWrite (motorA1,LOW);
+   digitalWrite (motorA1,LOW);
   digitalWrite(motorA2,HIGH);                       
   digitalWrite (motorB1,LOW);
   digitalWrite(motorB2,HIGH);
   
- left_sensor_state = analogRead(left_sensor_pin);
- right_sensor_state = analogRead(right_sensor_pin);
+ //left_sensor_state = analogRead(left_sensor_pin);
+// right_sensor_state = analogRead(right_sensor_pin);
  
- if ( right_sensor_state > GRANICA) digitalWrite(LED, 1);
- else digitalWrite(LED, 0); 
+    analogWrite (motorAspeed, 200);
+    analogWrite (motorBspeed, 200);
 
 }
