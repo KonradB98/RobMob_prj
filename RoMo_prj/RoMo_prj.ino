@@ -32,20 +32,26 @@ void loop() {
   digitalWrite (motorB1,LOW);
   digitalWrite(motorB2,HIGH);
   
- //left_sensor_state = analogRead(left_sensor_pin);
-// right_sensor_state = analogRead(right_sensor_pin);
+left_sensor_state = analogRead(left_sensor_pin);
+right_sensor_state = analogRead(right_sensor_pin);
  
-    analogWrite (motorAspeed, 200);  //robot skręca w lewo
+  /*  analogWrite (motorAspeed, 200);  //robot skręca w lewo
     analogWrite (motorBspeed, 150);
   delay(5000);
-    analogWrite (motorAspeed, 0);   //robot stop
-    analogWrite (motorBspeed, 0);
-   delay(2000);
     analogWrite (motorAspeed, 150); //robot skręca w prawo
     analogWrite (motorBspeed, 200);
-  delay(5000);
-    analogWrite (motorAspeed, 0);  //robot stop
+  delay(5000);*/
+ 
+if((left_sensor_state < GRANICA) && (right_sensor_state < GRANICA))
+  {
+    analogWrite (motorAspeed, 200); //jedź prosto jeśli 'widzisz' biale
+    analogWrite (motorBspeed, 200);
+  }
+
+  if((left_sensor_state > GRANICA) && (right_sensor_state > GRANICA))
+  {
+    analogWrite (motorAspeed, 0); //stój jeśli 'widzisz' czarne
     analogWrite (motorBspeed, 0);
-   delay(2000);
+  }
 
 }
