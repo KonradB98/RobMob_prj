@@ -50,6 +50,11 @@ delay(250); */
   {
       analogWrite (motorAspeed, 0);
       analogWrite (motorBspeed, vSpeed);
+  }//Jedz w lewo  
+  else if((left_sensor_state < GRANICA) && (right_sensor_state > GRANICA))
+  {
+      analogWrite (motorAspeed, vSpeed);
+      analogWrite (motorBspeed, 0);
   }//STOP    
   else if((left_sensor_state > GRANICA) && (right_sensor_state > GRANICA))
   {
