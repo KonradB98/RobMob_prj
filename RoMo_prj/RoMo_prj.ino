@@ -35,7 +35,17 @@ void loop() {
  //left_sensor_state = analogRead(left_sensor_pin);
 // right_sensor_state = analogRead(right_sensor_pin);
  
-    analogWrite (motorAspeed, 200);
+    analogWrite (motorAspeed, 200);  //robot skręca w lewo
+    analogWrite (motorBspeed, 150);
+  delay(5000);
+    analogWrite (motorAspeed, 0);   //robot stop
+    analogWrite (motorBspeed, 0);
+   delay(2000);
+    analogWrite (motorAspeed, 150); //robot skręca w prawo
     analogWrite (motorBspeed, 200);
+  delay(5000);
+    analogWrite (motorAspeed, 0);  //robot stop
+    analogWrite (motorBspeed, 0);
+   delay(2000);
 
 }
