@@ -1,10 +1,10 @@
 #define GRANICA 250 // poniżej białe, powyżej czarne
-#define LED 13
-//Piny mostka H
+int vSpeed = 150;        // predkosc obrotow silnika -- MAX 255
+//Prawy silnik
 const int motorAspeed  = 5; 
 const int motorA1      = 6;  
 const int motorA2      = 7; 
-  
+//Lewy silnik  
 const int motorB1      = 8; 
 const int motorB2      = 9; 
 const int motorBspeed  = 10; 
@@ -20,38 +20,40 @@ void setup() {
  pinMode(motorA2, OUTPUT);
  pinMode(motorB1, OUTPUT);
  pinMode(motorB2, OUTPUT);
- pinMode(LED, OUTPUT); 
- digitalWrite(LED, 0); //Wylaczenie diody
-Serial.begin(9600);//Otworzenie portu szeregowego do monitorowania danych z czujnika 
+
+ Serial.begin(9600);//Otworzenie portu szeregowego do monitorowania danych z czujnika 
 }
 
 void loop() {
 
-   digitalWrite (motorA1,LOW);
+  left_sensor_state = analogRead(left_sensor_pin);
+right_sensor_state = analogRead(right_sensor_pin);
+ 
+/* Serial.print("Lewy czujnik: ");
+Serial.println(left_sensor_state);
+delay(500);
+Serial.print("Prawy czujnik: ");
+Serial.println(right_sensor_state);
+delay(250); */
+  //Ustawienie kierunku jazdy robota (Do przodu)
+  digitalWrite (motorA1,LOW);
   digitalWrite(motorA2,HIGH);                       
   digitalWrite (motorB1,LOW);
   digitalWrite(motorB2,HIGH);
-  
-left_sensor_state = analogRead(left_sensor_pin);
-right_sensor_state = analogRead(right_sensor_pin);
- 
-  /*  analogWrite (motorAspeed, 200);  //robot skręca w lewo
-    analogWrite (motorBspeed, 150);
-  delay(5000);
-    analogWrite (motorAspeed, 150); //robot skręca w prawo
-    analogWrite (motorBspeed, 200);
-  delay(5000);*/
- 
-if((left_sensor_state < GRANICA) && (right_sensor_state < GRANICA))
+  //Jedz prosto
+  if((left_sensor_state < GRANICA) && (right_sensor_state < GRANICA))
   {
-    analogWrite (motorAspeed, 200); //jedź prosto jeśli 'widzisz' biale
-    analogWrite (motorBspeed, 200);
-  }
-
-  if((left_sensor_state > GRANICA) && (right_sensor_state > GRANICA))
+      analogWrite (motorAspeed, vSpeed);
+      analogWrite (motorBspeed, vSpeed);
+  }//Jedz w prawo  
+  else if((left_sensor_state > GRANICA) && (right_sensor_state < GRANICA))
   {
-    analogWrite (motorAspeed, 0); //stój jeśli 'widzisz' czarne
-    analogWrite (motorBspeed, 0);
+      analogWrite (motorAspeed, 0);
+      analogWrite (motorBspeed, vSpeed);
+  }//STOP    
+  else if((left_sensor_state > GRANICA) && (right_sensor_state > GRANICA))
+  {
+      analogWrite (motorAspeed, 0);
+      analogWrite (motorBspeed, 0);
   }
-
 }
