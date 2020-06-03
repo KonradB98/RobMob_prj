@@ -14,6 +14,8 @@ int left_sensor_state; //Wartosc odczytu z lewego czujnika
 
 const int right_sensor_pin =A1; // Analogicznie jak wyżej tylko tym razem dla prawego czujnika
 int right_sensor_state;
+
+ float e;
   
 void setup() {
  pinMode(motorA1, OUTPUT);
@@ -25,9 +27,6 @@ void setup() {
 }
 
 void loop() {
-
-  left_sensor_state = analogRead(left_sensor_pin);
-right_sensor_state = analogRead(right_sensor_pin);
  
 /* Serial.print("Lewy czujnik: ");
 Serial.println(left_sensor_state);
@@ -35,33 +34,48 @@ delay(500);
 Serial.print("Prawy czujnik: ");
 Serial.println(right_sensor_state);
 delay(250); */
+
   //Ustawienie kierunku jazdy robota (Do przodu)
-  goForward();
-  //Jedz prosto
-  if((left_sensor_state < GRANICA) && (right_sensor_state < GRANICA))
-  {
-      analogWrite (motorAspeed, vSpeed);
-      analogWrite (motorBspeed, vSpeed);
-  }//Jedz w prawo  
-  else if((left_sensor_state > GRANICA) && (right_sensor_state < GRANICA))
-  {
-      analogWrite (motorAspeed, 0);
-      analogWrite (motorBspeed, vSpeed);
-  }//Jedz w lewo  
-  else if((left_sensor_state < GRANICA) && (right_sensor_state > GRANICA))
-  {
-      analogWrite (motorAspeed, vSpeed);
-      analogWrite (motorBspeed, 0);
-  }//STOP    
-  else if((left_sensor_state > GRANICA) && (right_sensor_state > GRANICA))
-  {
-      analogWrite (motorAspeed, 0);
-      analogWrite (motorBspeed, 0);
-  }
+ // goForward();
+ e = readSensors();
+ 
 }
+
 void goForward(){
   digitalWrite (motorA1,LOW);
   digitalWrite(motorA2,HIGH);                       
   digitalWrite (motorB1,LOW);
   digitalWrite(motorB2,HIGH);
+}
+
+float readSensors (){
+  left_sensor_state = analogRead(left_sensor_pin);
+  right_sensor_state = analogRead(right_sensor_pin);
+  goForward();
+  //Jedz prosto
+  if((left_sensor_state < GRANICA) && (right_sensor_state < GRANICA))
+  {
+    e = 0;
+      analogWrite (motorAspeed, vSpeed);
+      analogWrite (motorBspeed, vSpeed);
+  }//Jedz w prawo  
+  else if((left_sensor_state > GRANICA) && (right_sensor_state < GRANICA))
+  {
+    e = 2;
+      analogWrite (motorAspeed, 0);
+      analogWrite (motorBspeed, vSpeed);
+  }//Jedz w lewo  
+  else if((left_sensor_state < GRANICA) && (right_sensor_state > GRANICA))
+  {
+    e = -2;
+      analogWrite (motorAspeed, vSpeed);
+      analogWrite (motorBspeed, 0);
+  }//STOP    
+  else if((left_sensor_state > GRANICA) && (right_sensor_state > GRANICA))
+  {
+    e = 100;
+      analogWrite (motorAspeed, 0);
+      analogWrite (motorBspeed, 0);
+  } 
+  return e;
 }
