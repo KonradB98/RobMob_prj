@@ -36,10 +36,7 @@ Serial.print("Prawy czujnik: ");
 Serial.println(right_sensor_state);
 delay(250); */
   //Ustawienie kierunku jazdy robota (Do przodu)
-  digitalWrite (motorA1,LOW);
-  digitalWrite(motorA2,HIGH);                       
-  digitalWrite (motorB1,LOW);
-  digitalWrite(motorB2,HIGH);
+  goForward();
   //Jedz prosto
   if((left_sensor_state < GRANICA) && (right_sensor_state < GRANICA))
   {
@@ -61,4 +58,10 @@ delay(250); */
       analogWrite (motorAspeed, 0);
       analogWrite (motorBspeed, 0);
   }
+}
+void goForward(){
+  digitalWrite (motorA1,LOW);
+  digitalWrite(motorA2,HIGH);                       
+  digitalWrite (motorB1,LOW);
+  digitalWrite(motorB2,HIGH);
 }
