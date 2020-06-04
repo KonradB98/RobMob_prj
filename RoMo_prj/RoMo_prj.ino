@@ -69,14 +69,38 @@ void setup() {
 }
 
 void loop() {
+/*
+  left_sensor_state = analogRead(left_sensor_pin);
+  right_sensor_state = analogRead(right_sensor_pin);
+  Serial.println(left_sensor_state);
+  Serial.print(",");             
+  Serial.println(right_sensor_state);   
+  */
   
   int32_t error = readSensors ();
+  if(error != 100){
+    goForward();
     pid_motors = pid_calc(&pid,error);
     int l_motor = vSpeed + pid_motors;
     int r_motor = vSpeed - pid_motors;
-    Serial.print(l_motor);      
-  Serial.print(",");             
-  Serial.println(r_motor);  
+    if(l_motor > 255)
+      l_motor = 255;
+    else if (l_motor < 0)
+      l_motor = 0;
+  
+    if(r_motor > 255)
+      r_motor = 255;
+    else if (r_motor < 0)
+      r_motor = 0;
+  //Serial.print(l_motor);      
+  //Serial.print(",");             
+  //Serial.println(r_motor);  
+     analogWrite (motorAspeed,r_motor);
+     analogWrite (motorBspeed,l_motor); 
+  }
+  else{
+     Stop();
+  }
    
   delay(20);
   
