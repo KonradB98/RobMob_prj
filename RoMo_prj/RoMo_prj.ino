@@ -43,6 +43,14 @@ delay(250); */
   //Ustawienie kierunku jazdy robota (Do przodu)
  // goForward();
  e = readSensors();
+ if(e != 100)
+ {
+    regMotors(e);
+ }
+ else{
+    Serial.println("STOP");
+    //delay(1000);
+ }
  
 }
 
@@ -100,4 +108,25 @@ float computePID(float er){
   last_e = er;
   previousTime = currentTime;
   return out;
+}
+
+void regMotors(float er){
+  float PID = computePID(er);
+
+  int l_motor = vSpeed + (int)PID;
+  int r_motor = vSpeed - (int)PID;
+  
+  l_motor = constrain(l_motor,0,250);
+  r_motor = constrain(r_motor,0,250);
+
+   analogWrite (motorAspeed,r_motor);
+   analogWrite (motorBspeed,l_motor);
+  
+  //Serial.print("Predkosc silnika lewego  = ");
+  //Serial.println(l_motor);
+  //Serial.print(" ");
+  //Serial.print("Predkosc silnika prawego  = ");
+  //Serial.println(r_motor);
+  //delay(100);
+  
 }
