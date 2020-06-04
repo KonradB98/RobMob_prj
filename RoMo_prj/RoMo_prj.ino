@@ -18,9 +18,9 @@ int right_sensor_state;
 float e,last_e,e_sum,e_d,Pout,Iout,Dout,tau;
 unsigned long currentTime, previousTime;
 //Nastawy regulatora
-const float Kp = 2;  
+const float Kp = 25;  
 const float Ki = 0;
-const float Kd = 0;  
+const float Kd = 4;  
   
 void setup() {
  pinMode(motorA1, OUTPUT);
