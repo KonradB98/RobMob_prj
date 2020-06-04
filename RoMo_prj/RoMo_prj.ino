@@ -42,11 +42,10 @@ struct pid_t{
 
 struct pid_t pid;
 
-
 //Nastawy regulatora
-const float Kp = 1;  
+const float Kp = 41;  
 const float Ki = 0;
-const float Kd = 0; 
+const float Kd = 8; 
    
 void setup() {
   pinMode(motorA1, OUTPUT);
@@ -55,14 +54,23 @@ void setup() {
   pinMode(motorB2, OUTPUT);
  
   pid_init(&pid, Kp, Ki, Kd, 10, 1);
+  pid.p_max = pid_scale(&pid, 255);
+  pid.p_min = pid_scale(&pid, -255);
+  pid.i_max = pid_scale(&pid, 255);
+  pid.i_min = pid_scale(&pid, -255);
+  pid.d_max = pid_scale(&pid, 255);
+  pid.d_min = pid_scale(&pid, -255);
+  pid.total_max = pid_scale(&pid, 255);
+  pid.total_min = pid_scale(&pid, -255);
   
-  Serial.begin(9600);//Otworzenie portu szeregowego do monitorowania danych z czujnik
+  Serial.begin(9600);//Otworzenie portu szeregowego do monitorowania danych z czujnika
 }
 
 void loop() {
 
-   Serial.println(pid.p); 
-   delay(1000);
+  Serial.println(pid.total_max); 
+   
+  delay(1000);
   
 }
 int32_t readSensors (){
@@ -127,4 +135,8 @@ void pid_init(pid_t * pid, float p, float i, float d, uint8_t f, int32_t dt_ms) 
   pid->total_max = INT32_MAX;
   pid->total_min = INT32_MIN;
   pid->dt_ms = dt_ms;
+}
+
+int32_t pid_scale(pid_t * pid, float v) {
+  return v * pid->power;
 }
