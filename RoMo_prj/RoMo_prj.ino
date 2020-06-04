@@ -53,12 +53,16 @@ void setup() {
   pinMode(motorA2, OUTPUT);
   pinMode(motorB1, OUTPUT);
   pinMode(motorB2, OUTPUT);
+ 
+  pid_init(&pid, Kp, Ki, Kd, 10, 1);
   
-  Serial.begin(9600);//Otworzenie portu szeregowego do monitorowania danych z czujnika
+  Serial.begin(9600);//Otworzenie portu szeregowego do monitorowania danych z czujnik
 }
 
 void loop() {
-  Serial.println(Kp);
+
+   Serial.println(pid.p); 
+   delay(1000);
   
 }
 int32_t readSensors (){
@@ -97,4 +101,30 @@ void Stop(){
   digitalWrite(motorA2,LOW);                       
   digitalWrite (motorB1,LOW);
   digitalWrite(motorB2,LOW);
+}
+
+void pid_init(pid_t * pid, float p, float i, float d, uint8_t f, int32_t dt_ms) {
+  uint32_t k;
+  pid->power = 1;
+  for (k = 0; k < f; ++k) {
+    pid->power = pid->power * 2;
+  }
+  pid->f = f;
+  pid->p = (int32_t) (p * pid->power);
+  pid->i = (int32_t) (i * pid->power);
+  pid->d = (int32_t) (d * pid->power);
+  pid->p_val = 0;
+  pid->i_val = 0;
+  pid->d_val = 0;
+  pid->p_max = INT32_MAX;
+  pid->p_min = INT32_MIN;
+  pid->i_max = INT32_MAX;
+  pid->i_min = INT32_MIN;
+  pid->d_max = INT32_MAX;
+  pid->d_min = INT32_MIN;
+  pid->e_last = 0;
+  pid->sum = 0;
+  pid->total_max = INT32_MAX;
+  pid->total_min = INT32_MIN;
+  pid->dt_ms = dt_ms;
 }
