@@ -15,14 +15,19 @@ int left_sensor_state; //Wartosc odczytu z lewego czujnika
 const int right_sensor_pin =A1; // Analogicznie jak wyżej tylko tym razem dla prawego czujnika
 int right_sensor_state;
 
- float e;
+float e,last_e,e_sum,e_d,Pout,Iout,Dout,tau;
+unsigned long currentTime, previousTime;
+//Nastawy regulatora
+const float Kp = 2;  
+const float Ki = 0;
+const float Kd = 0;  
   
 void setup() {
  pinMode(motorA1, OUTPUT);
  pinMode(motorA2, OUTPUT);
  pinMode(motorB1, OUTPUT);
  pinMode(motorB2, OUTPUT);
-
+ e = last_e = e_sum = e_d = Pout = Iout = Dout = 0;
  Serial.begin(9600);//Otworzenie portu szeregowego do monitorowania danych z czujnika 
 }
 
@@ -78,4 +83,21 @@ float readSensors (){
       analogWrite (motorBspeed, 0);
   } 
   return e;
+}
+
+float computePID(float er){
+  
+  Pout = Kp*er;
+  
+  e_sum += (er);
+  Iout = Ki*e_sum;
+
+  e_d = (er - last_e);
+  Dout = Kd*e_d;
+   
+  float out = (Pout + Iout + Dout);
+  
+  last_e = er;
+  previousTime = currentTime;
+  return out;
 }
